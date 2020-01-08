@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportTask"
+                 id="shopware_blog.fast_bill_connector.scheduled_task.product_import_task">
+            <tag name="shopware.scheduled.task"/>
+        </service>
+
+        <service class="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportHandler"
+                 id="shopware_blog.fast_bill_connector.scheduled_task.product_import_handler">
+            <argument id="scheduled_task.repository" type="service"/>
+            <argument id="shopware_blog.fast_bill_connector.importer.product_importer" type="service"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+
+
+        <service class="ShopwareBlog\FastBillConnector\Api\ApiClientFactory"
+                 id="shopware_blog.fast_bill_connector.api.api_client_factory">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service class="FastBillSdk\Api\ApiClient" id="fast_bill_sdk.api.api_client">
+            <factory service="shopware_blog.fast_bill_connector.api.api_client_factory" method="getApiClient"/>
+        </service>
+
+        <service class="FastBillSdk\Common\XmlService" id="fast_bill_sdk.common.xml_service"/>
+
+        <service class="FastBillSdk\Product\ProductValidator" id="fast_bill_sdk.product.product_validator"/>
+
+        <service class="FastBillSdk\Product\ProductService" id="fast_bill_sdk.product.product_service">
+            <argument id="fast_bill_sdk.api.api_client" type="service"/>
+            <argument id="fast_bill_sdk.common.xml_service" type="service"/>
+            <argument id="fast_bill_sdk.product.product_validator" type="service"/>
+        </service>
+
+        <service class="ShopwareBlog\FastBillConnector\Command\ProductImportCommand"
+                 id="shopware_blog.fast_bill_connector.command.product_import_command">
+            <argument id="shopware_blog.fast_bill_connector.importer.product_importer" type="service"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service class="ShopwareBlog\FastBillConnector\Importer\ProductImporter"
+                 id="shopware_blog.fast_bill_connector.importer.product_importer">
+            <argument id="product.repository" type="service"/>
+            <argument id="tax.repository" type="service"/>
+            <argument id="fast_bill_sdk.product.product_service" type="service"/>
+        </service>
+
+    </services>
+</container>
