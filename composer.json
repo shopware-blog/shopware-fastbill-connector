@@ -1,0 +1,40 @@
+{
+  "name": "shopware-blog/fastbill-connector",
+  "description": "FastBill integration for Shopware 6",
+  "version": "0.1.1",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "shopware blog"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "6.4.1",
+    "fastbill/fastbill-php-sdk": "^0.0"
+  },
+  "extra": {
+    "shopware-plugin-class": "ShopwareBlog\\FastBillConnector\\FastBillConnector",
+    "copyright": "(c) by shopware blog",
+    "label": {
+      "de-DE": "FastBill Integration für Shopware 6",
+      "en-GB": "FastBill Integration for Shopware 6"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "ShopwareBlog\\FastBillConnector\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ShopwareBlog\\FastBillConnector\\Test\\": "tests/"
+    }
+  },
+  "conflict": {
+    "shopware/storefront": "<6,>=7",
+    "shopware/administration": "<6,>=7"
+  },
+  "minimum-stability": "RC",
+  "prefer-stable": true
+}

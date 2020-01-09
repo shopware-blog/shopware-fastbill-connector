@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportTask">
+            <tag name="shopware.scheduled.task"/>
+        </service>
+
+        <service id="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportHandler">
+            <argument id="scheduled_task.repository" type="service"/>
+            <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+
+
+        <service id="ShopwareBlog\FastBillConnector\Api\ApiClientFactory">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="FastBillSdk\Api\ApiClient">
+            <factory service="ShopwareBlog\FastBillConnector\Api\ApiClientFactory" method="getApiClient"/>
+        </service>
+
+        <service id="FastBillSdk\Common\XmlService"/>
+
+        <service id="FastBillSdk\Product\ProductValidator"/>
+
+        <service id="FastBillSdk\Product\ProductService">
+            <argument id="FastBillSdk\Api\ApiClient" type="service"/>
+            <argument id="FastBillSdk\Common\XmlService" type="service"/>
+            <argument id="FastBillSdk\Product\ProductValidator" type="service"/>
+        </service>
+
+        <service class="ShopwareBlog\FastBillConnector\Command\ProductImportCommand"
+                 id="shopware_blog.fast_bill_connector.command.product_import_command">
+            <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="ShopwareBlog\FastBillConnector\Importer\ProductImporter">
+            <argument id="product.repository" type="service"/>
+            <argument id="tax.repository" type="service"/>
+            <argument id="FastBillSdk\Product\ProductService" type="service"/>
+        </service>
+
+    </services>
+</container>
