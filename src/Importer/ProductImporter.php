@@ -48,15 +48,12 @@ class ProductImporter
                 Context::createDefaultContext()
             )->getEntities()->first()->getId();
 
-            $productIdEntity = $this->productRepository->search(
+            $productIds = $this->productRepository->searchIds(
                 (new Criteria())->addFilter(new EqualsFilter('customFields.swb_fastbill_id', $product->articleId)),
                 Context::createDefaultContext()
-            )->getEntities();
+            )->getIds();
 
-            $productId = false;
-            if ($productIdEntity->count() === 1) {
-                $productId = $productIdEntity->first()->getId();
-            }
+            $productId = array_pop($productIds);
 
             $products[] = [
                 'id' => $productId,

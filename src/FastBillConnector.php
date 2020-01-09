@@ -3,6 +3,7 @@
 namespace ShopwareBlog\FastBillConnector;
 
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\System\CustomField\CustomFieldTypes;
@@ -11,8 +12,9 @@ class FastBillConnector extends Plugin
 {
     public function install(InstallContext $installContext): void
     {
+        /** @var EntityRepositoryInterface $customFieldSetRepository */
         $customFieldSetRepository = $this->container->get('custom_field_set.repository');
-        $customFieldSetRepository->create(
+        $customFieldSetRepository->upsert(
             [
                 [
                     'name' => 'swb_fastbill_product',

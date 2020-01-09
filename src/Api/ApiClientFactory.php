@@ -26,7 +26,6 @@ class ApiClientFactory
     {
         $this->fastBillUserName = (string) $systemConfigService->get('FastBillConnector.config.fastBillUserName');
         $this->fastBillApiKey = (string) $systemConfigService->get('FastBillConnector.config.fastBillApiKey');
-
     }
 
     public function getApiClient(): FastBillApiClient
