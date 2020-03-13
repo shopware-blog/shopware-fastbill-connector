@@ -66,8 +66,8 @@ class OrderExporter
                 $fbItem = new ItemEntity();
                 $fbItem->description = $lineItem->getLabel();
                 $fbItem->vatPercent = $lineItem->getPrice()->getCalculatedTaxes()->first()->getTaxRate();
-                $fbItem->unitPrice = $lineItem->getPrice()->getTotalPrice() - $lineItem->getPrice()->getCalculatedTaxes(
-                    )->getAmount();
+                $fbItem->unitPrice = $lineItem->getPrice()->getUnitPrice() -
+                    ($lineItem->getPrice()->getCalculatedTaxes()->getAmount() / $lineItem->getPrice()->getQuantity());
                 $fbItem->quantity = $lineItem->getPrice()->getQuantity();
                 $fbInvoice->items[] = $fbItem;
             }
