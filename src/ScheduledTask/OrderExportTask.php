@@ -4,11 +4,11 @@ namespace ShopwareBlog\FastBillConnector\ScheduledTask;
 
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
-class ProductImportTask extends ScheduledTask
+class OrderExportTask extends ScheduledTask
 {
     public static function getTaskName(): string
     {
-        return 'fastbill.import-products';
+        return 'fastbill.export-orders';
     }
 
     public static function getDefaultInterval(): int

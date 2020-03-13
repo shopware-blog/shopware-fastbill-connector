@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "fastbill/fastbill-php-sdk",
-            "version": "0.0.4",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fastbill/fastbill-php-sdk.git",
-                "reference": "b62b17b8e573d2632e3eb207c7f1adfd502ef3fd"
+                "reference": "21ec0aa9b859b843193215ef3039473b07f7b7de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fastbill/fastbill-php-sdk/zipball/b62b17b8e573d2632e3eb207c7f1adfd502ef3fd",
-                "reference": "b62b17b8e573d2632e3eb207c7f1adfd502ef3fd",
+                "url": "https://api.github.com/repos/fastbill/fastbill-php-sdk/zipball/21ec0aa9b859b843193215ef3039473b07f7b7de",
+                "reference": "21ec0aa9b859b843193215ef3039473b07f7b7de",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
                 }
             ],
             "description": "FastBill SDK for PHP",
-            "time": "2019-12-06T23:42:40+00:00"
+            "time": "2020-02-07T07:17:31+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

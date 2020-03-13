@@ -3,48 +3,62 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
     <services>
         <service id="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportTask">
             <tag name="shopware.scheduled.task"/>
         </service>
-
         <service id="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportHandler">
             <argument id="scheduled_task.repository" type="service"/>
             <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
             <tag name="messenger.message_handler"/>
         </service>
-
-
         <service id="ShopwareBlog\FastBillConnector\Api\ApiClientFactory">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
-
         <service id="FastBillSdk\Api\ApiClient">
             <factory service="ShopwareBlog\FastBillConnector\Api\ApiClientFactory" method="getApiClient"/>
         </service>
-
         <service id="FastBillSdk\Common\XmlService"/>
-
         <service id="FastBillSdk\Product\ProductValidator"/>
-
         <service id="FastBillSdk\Product\ProductService">
             <argument id="FastBillSdk\Api\ApiClient" type="service"/>
             <argument id="FastBillSdk\Common\XmlService" type="service"/>
             <argument id="FastBillSdk\Product\ProductValidator" type="service"/>
         </service>
-
         <service class="ShopwareBlog\FastBillConnector\Command\ProductImportCommand"
                  id="shopware_blog.fast_bill_connector.command.product_import_command">
             <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
             <tag name="console.command"/>
         </service>
-
+        <service class="ShopwareBlog\FastBillConnector\Exporter\OrderExporter" id="shopware_blog.fast_bill_connector.exporter.order_exporter">
+            <argument id="order.repository" type="service" />
+            <argument id="fast_bill_sdk.invoice.invoice_service" type="service" />
+            <argument id="fast_bill_sdk.customer.customer_service" type="service" />
+        </service>
+        <service class="ShopwareBlog\FastBillConnector\Command\OrderExportCommand"
+                 id="shopware_blog.fast_bill_connector.command.order_export_command">
+            <argument id="shopware_blog.fast_bill_connector.exporter.order_exporter" type="service"/>
+            <tag name="console.command"/>
+        </service>
         <service id="ShopwareBlog\FastBillConnector\Importer\ProductImporter">
             <argument id="product.repository" type="service"/>
             <argument id="tax.repository" type="service"/>
             <argument id="FastBillSdk\Product\ProductService" type="service"/>
         </service>
-
+        <service class="FastBillSdk\Item\ItemValidator" id="fast_bill_sdk.item.item_validator"/>
+        <service class="FastBillSdk\Invoice\InvoiceValidator" id="fast_bill_sdk.invoice.invoice_validator">
+            <argument id="fast_bill_sdk.item.item_validator" type="service"/>
+        </service>
+        <service class="FastBillSdk\Invoice\InvoiceService" id="fast_bill_sdk.invoice.invoice_service">
+            <argument id="FastBillSdk\Api\ApiClient" type="service"/>
+            <argument id="FastBillSdk\Common\XmlService" type="service"/>
+            <argument id="fast_bill_sdk.invoice.invoice_validator" type="service"/>
+        </service>
+        <service class="FastBillSdk\Customer\CustomerValidator" id="fast_bill_sdk.customer.customer_validator"/>
+        <service class="FastBillSdk\Customer\CustomerService" id="fast_bill_sdk.customer.customer_service">
+            <argument id="FastBillSdk\Api\ApiClient" type="service"/>
+            <argument id="FastBillSdk\Common\XmlService" type="service"/>
+            <argument id="fast_bill_sdk.customer.customer_validator" type="service"/>
+        </service>
     </services>
 </container>

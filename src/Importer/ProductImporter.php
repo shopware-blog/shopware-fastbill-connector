@@ -40,17 +40,18 @@ class ProductImporter
     public function importProducts(): void
     {
         $products = [];
+        $defaultContext = Context::createDefaultContext();
         $searchStruct = new ProductSearchStruct();
 
         foreach ($this->productService->getProducts($searchStruct) as $product) {
             $taxId = $this->taxRepository->search(
                 (new Criteria())->addFilter(new EqualsFilter('taxRate', $product->vatPercent)),
-                Context::createDefaultContext()
+                $defaultContext
             )->getEntities()->first()->getId();
 
             $productIds = $this->productRepository->searchIds(
                 (new Criteria())->addFilter(new EqualsFilter('customFields.swb_fastbill_id', $product->articleId)),
-                Context::createDefaultContext()
+                $defaultContext
             )->getIds();
 
             $productId = array_pop($productIds);
@@ -78,7 +79,7 @@ class ProductImporter
 
         $this->productRepository->upsert(
             $products,
-            Context::createDefaultContext()
+            $defaultContext
         );
     }
 }

@@ -39,6 +39,18 @@ class FastBillConnector extends Plugin
                         ['entityName' => 'product'],
                     ],
                 ],
+                [
+                    'name' => 'swb_fastbill_order',
+                    'customFields' => [
+                        [
+                            'name' => 'swb_fastbill_invoice_id',
+                            'type' => CustomFieldTypes::INT,
+                        ],
+                    ],
+                    'relations' => [
+                        ['entityName' => 'order'],
+                    ],
+                ],
             ], Context::createDefaultContext()
         );
     }
