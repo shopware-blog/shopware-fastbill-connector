@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
@@ -10,6 +9,14 @@
         <service id="ShopwareBlog\FastBillConnector\ScheduledTask\ProductImportHandler">
             <argument id="scheduled_task.repository" type="service"/>
             <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+        <service id="ShopwareBlog\FastBillConnector\ScheduledTask\OrderExportTask">
+            <tag name="shopware.scheduled.task"/>
+        </service>
+        <service id="ShopwareBlog\FastBillConnector\ScheduledTask\OrderExportHandler">
+            <argument id="scheduled_task.repository" type="service"/>
+            <argument id="ShopwareBlog\FastBillConnector\Exporter\OrderExporter" type="service"/>
             <tag name="messenger.message_handler"/>
         </service>
         <service id="ShopwareBlog\FastBillConnector\Api\ApiClientFactory">
@@ -30,14 +37,13 @@
             <argument id="ShopwareBlog\FastBillConnector\Importer\ProductImporter" type="service"/>
             <tag name="console.command"/>
         </service>
-        <service class="ShopwareBlog\FastBillConnector\Exporter\OrderExporter" id="shopware_blog.fast_bill_connector.exporter.order_exporter">
-            <argument id="order.repository" type="service" />
-            <argument id="fast_bill_sdk.invoice.invoice_service" type="service" />
-            <argument id="fast_bill_sdk.customer.customer_service" type="service" />
+        <service id="ShopwareBlog\FastBillConnector\Exporter\OrderExporter">
+            <argument id="order.repository" type="service"/>
+            <argument id="FastBillSdk\Invoice\InvoiceService" type="service"/>
+            <argument id="FastBillSdk\Customer\CustomerService" type="service"/>
         </service>
-        <service class="ShopwareBlog\FastBillConnector\Command\OrderExportCommand"
-                 id="shopware_blog.fast_bill_connector.command.order_export_command">
-            <argument id="shopware_blog.fast_bill_connector.exporter.order_exporter" type="service"/>
+        <service id="ShopwareBlog\FastBillConnector\Command\OrderExportCommand">
+            <argument id="ShopwareBlog\FastBillConnector\Exporter\OrderExporter" type="service"/>
             <tag name="console.command"/>
         </service>
         <service id="ShopwareBlog\FastBillConnector\Importer\ProductImporter">
@@ -45,20 +51,20 @@
             <argument id="tax.repository" type="service"/>
             <argument id="FastBillSdk\Product\ProductService" type="service"/>
         </service>
-        <service class="FastBillSdk\Item\ItemValidator" id="fast_bill_sdk.item.item_validator"/>
-        <service class="FastBillSdk\Invoice\InvoiceValidator" id="fast_bill_sdk.invoice.invoice_validator">
-            <argument id="fast_bill_sdk.item.item_validator" type="service"/>
+        <service id="FastBillSdk\Item\ItemValidator"/>
+        <service id="FastBillSdk\Invoice\InvoiceValidator">
+            <argument id="FastBillSdk\Item\ItemValidator" type="service"/>
         </service>
-        <service class="FastBillSdk\Invoice\InvoiceService" id="fast_bill_sdk.invoice.invoice_service">
+        <service id="FastBillSdk\Invoice\InvoiceService">
             <argument id="FastBillSdk\Api\ApiClient" type="service"/>
             <argument id="FastBillSdk\Common\XmlService" type="service"/>
-            <argument id="fast_bill_sdk.invoice.invoice_validator" type="service"/>
+            <argument id="FastBillSdk\Invoice\InvoiceValidator" type="service"/>
         </service>
-        <service class="FastBillSdk\Customer\CustomerValidator" id="fast_bill_sdk.customer.customer_validator"/>
-        <service class="FastBillSdk\Customer\CustomerService" id="fast_bill_sdk.customer.customer_service">
+        <service id="FastBillSdk\Customer\CustomerValidator"/>
+        <service id="FastBillSdk\Customer\CustomerService">
             <argument id="FastBillSdk\Api\ApiClient" type="service"/>
             <argument id="FastBillSdk\Common\XmlService" type="service"/>
-            <argument id="fast_bill_sdk.customer.customer_validator" type="service"/>
+            <argument id="FastBillSdk\Customer\CustomerValidator" type="service"/>
         </service>
     </services>
 </container>
