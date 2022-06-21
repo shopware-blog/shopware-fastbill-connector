@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "guzzlehttp/guzzle": "6.5.7",
+    "guzzlehttp/guzzle": "6.5.8",
     "fastbill/fastbill-php-sdk": "^0.0"
   },
   "extra": {
